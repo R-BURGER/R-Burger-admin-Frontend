@@ -13,7 +13,10 @@ function Header() {
             className="rounded-circle d-flex align-items-center justify-content-center"
             style={{ width: 42, height: 42, background: 'var(--gold-500)', fontFamily: 'var(--font-display)', fontSize: 20, color: 'var(--maroon-950)' }}
           >
-            R
+            <img src="/logo.png"
+            className=" d-flex align-items-center justify-content-center"
+            style={{ width: 44, height: 44, }} />
+       
           </div>
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 24, color: 'var(--gold-400)', lineHeight: 1 }}>R Burger</div>
