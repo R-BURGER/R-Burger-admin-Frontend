@@ -14,7 +14,7 @@ function BranchesPanel() {
     const invalidate = () => queryClient.invalidateQueries({ queryKey: ['admin', 'branches'] });
 
     const createMutation = useMutation({
-        mutationFn: (payload) => api.post(ENDPOINTS.createBranch, payload),
+        mutationFn: (payload) => api.post(ENDPOINTS.adminBranches, payload),
         onSuccess: () => { invalidate(); setShowModal(false); },
         onError: (err) => setActionError(err.response?.data?.title || 'Failed to create branch'),
     });
@@ -88,7 +88,7 @@ function BranchesPanel() {
                 <table className="w-100" style={{ borderCollapse: 'collapse', background: '#fff', borderRadius: 14, overflow: 'hidden', boxShadow: 'var(--shadow-card)' }}>
                     <thead>
                         <tr style={{ background: 'var(--maroon-800)', color: 'var(--gold-300)' }}>
-                            {['Branch', 'Delivery Fee', 'ETA', 'Status', 'Actions'].map((h) => (
+                            {['Branch','Hotline' , 'Delivery Fee', 'ETA', 'Status', 'Actions'].map((h) => (
                                 <th key={h} style={{ fontSize: 12, padding: '10px 12px', textAlign: 'start' }}>{h}</th>
                             ))}
                         </tr>
@@ -100,6 +100,7 @@ function BranchesPanel() {
                             branches.map((branch, i) => (
                                 <tr key={branch.id} style={{ background: i % 2 === 1 ? '#FBF6EA' : '#fff' }}>
                                     <td style={{ padding: '10px 12px', fontSize: 13, fontWeight: 700 }}>{branch.nameEn}</td>
+                                    <td style={{ padding: '10px 12px', fontSize: 13 }}>{branch.hotlinePhones}</td>
                                     <td style={{ padding: '10px 12px', fontSize: 13 }}>{branch.deliveryFee} EGP</td>
                                     <td style={{ padding: '10px 12px', fontSize: 13 }}>{branch.etaMinMinutes}–{branch.etaMaxMinutes} min</td>
                                     <td style={{ padding: '10px 12px' }}>
@@ -175,7 +176,8 @@ function BranchModal({ branch, saving, onClose, onSave }) {
             return;
         }
         onSave({
-            nameAr, nameEn, hotline,
+            nameAr, nameEn,
+            hotlinePhones: hotline,
             deliveryFee: Number(deliveryFee),
             etaMinMinutes: Number(etaMinMinutes),
             etaMaxMinutes: Number(etaMaxMinutes),
