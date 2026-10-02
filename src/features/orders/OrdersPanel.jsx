@@ -14,14 +14,14 @@ function OrdersPanel() {
   const { data: branches = [] } = useBranchesQuery();
 
   const branchName = (id) => branches.find((b) => Number(b.id) === Number(id))?.nameEn || `Branch #${id}`;
+  const filteredOrders = orders.filter((order) => !order.isCancelled);
 
-       const deleteMutation = useMutation({
+  const deleteMutation = useMutation({
     mutationFn: (id) => api.delete(ENDPOINTS.orderById(id)),
     onSuccess: (_data, deletedId) => {
       queryClient.setQueryData(['admin', 'orders'], (old = []) =>
         old.filter((o) => o.orderId !== deletedId)
       );
-      // invalidateQueries متشال مؤقتًا للاختبار
     },
   });
 
@@ -53,10 +53,10 @@ function OrdersPanel() {
             </tr>
           </thead>
           <tbody>
-            {orders.length === 0 ? (
-              <tr><td colSpan={7}><div className="text-center py-5 text-muted">No data to display here.</div></td></tr>
+            {filteredOrders.length === 0 ? (
+              <tr><td colSpan={8}><div className="text-center py-5 text-muted">No data to display here.</div></td></tr>
             ) : (
-              orders.map((o, i) => (
+              filteredOrders.map((o, i) => (
                 <tr key={o.orderId} style={{ background: i % 2 === 1 ? '#FBF6EA' : '#fff' }}>
                   <td style={{ padding: '10px 12px', fontSize: 13, fontWeight: 700 }}>#{o.orderNumber}</td>
                   <td style={{ padding: '10px 12px', fontSize: 13 }}>{branchName(o.branchId)}</td>
